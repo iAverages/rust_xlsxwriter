@@ -1062,6 +1062,7 @@ use regex::Regex;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
+use crate::data_validation::DataValidation;
 #[cfg(feature = "serde")]
 use crate::{
     deserialize_headers, serializer::SerializerState, CustomSerializeField,
@@ -1271,6 +1272,7 @@ pub struct Worksheet {
     has_x14_conditional_formats: bool,
     has_sparklines: bool,
     sparklines: Vec<Sparkline>,
+    data_validations: Vec<DataValidation>,
 
     embedded_image_ids: HashMap<u64, u32>,
 
@@ -1467,6 +1469,7 @@ impl Worksheet {
             has_embedded_image_descriptions: false,
             has_sparklines: false,
             sparklines: vec![],
+            data_validations: vec![],
 
             #[cfg(feature = "serde")]
             serializer_state: SerializerState::new(),
@@ -7349,6 +7352,17 @@ impl Worksheet {
         self
     }
 
+    /// Set the data validation for a cell or range of cells.
+    ///
+    /// The `set_data_validation()` method can be used to set data validation
+    /// for a cell or range of cells. Data validation is a feature in Excel
+    /// which allows you to control what a user can enter into a cell.
+    ///
+    pub fn set_data_validation(&mut self, data_validations: Vec<DataValidation>) -> &mut Worksheet {
+        self.data_validations = data_validations;
+        self
+    }
+
     /// Enable the use of newer Excel future functions.
     ///
     /// Enable the use of newer Excel “future” functions without having to
@@ -12740,6 +12754,8 @@ impl Worksheet {
         // Write the sheetData element.
         self.write_sheet_data();
 
+        self.write_data_validations();
+
         // Write the sheetProtection element.
         if self.protection_on {
             self.write_sheet_protection();
@@ -13098,6 +13114,49 @@ impl Worksheet {
             self.write_data_table();
             self.writer.xml_end_tag("sheetData");
         }
+    }
+
+    // Write the <dataValidations> element.
+    fn write_data_validations(&mut self) {
+        if self.data_validations.is_empty() {
+            return;
+        }
+
+        let attributes = vec![("count", self.data_validations.len().to_string())];
+
+        self.writer.xml_start_tag("dataValidations", &attributes);
+
+        for data_validation in &self.data_validations.clone() {
+            self.write_data_validation(data_validation);
+        }
+
+        self.writer.xml_end_tag("dataValidations");
+    }
+
+    // Write the <dataValidation> element.
+    fn write_data_validation(&mut self, data_validation: &DataValidation) {
+        self.writer
+            .xml_start_tag("dataValidation", &data_validation.get_attributes());
+
+        let attributes: [(&str, &str); 0] = [];
+
+        if let Some(formula1) = &data_validation.formula1 {
+            self.writer.xml_data_element(
+                "formula1",
+                format!("\"{}\"", formula1.value).as_str(),
+                &attributes,
+            );
+        }
+
+        if let Some(formula2) = &data_validation.formula2 {
+            self.writer.xml_data_element(
+                "formula2",
+                format!("\"{}\"", formula2.value).as_str(),
+                &attributes,
+            );
+        }
+
+        self.writer.xml_end_tag("dataValidation");
     }
 
     // Write the <mergeCells> element.

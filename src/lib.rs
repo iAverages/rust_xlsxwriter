@@ -167,6 +167,7 @@ mod app;
 mod content_types;
 mod core;
 mod custom;
+mod data_validation;
 mod datetime;
 mod drawing;
 mod error;
@@ -209,6 +210,7 @@ pub mod worksheet;
 mod test_functions;
 
 // Re-export the public APIs.
+pub use data_validation::*;
 pub use datetime::*;
 pub use error::*;
 pub use filter::*;
