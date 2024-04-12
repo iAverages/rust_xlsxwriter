@@ -1,6 +1,6 @@
 #[derive(Clone, Default)]
 pub struct DataValidation {
-    pub _type: Option<String>,
+    pub validation_type: Option<String>,
     // pub error_style: String
     // pub ime_mode: String
     // pub operator: String
@@ -25,7 +25,7 @@ impl DataValidation {
     }
 
     pub fn set_type(&mut self, value: &str) -> &mut Self {
-        self._type = Some(value.to_string());
+        self.validation_type = Some(value.to_string());
         self
     }
 
@@ -90,8 +90,8 @@ impl DataValidation {
 
     pub fn get_attributes(&self) -> Vec<(&str, String)> {
         let mut attributes = Vec::new();
-        if let Some(_type) = &self._type {
-            attributes.push(("type", _type.clone()));
+        if let Some(validation_type) = &self.validation_type {
+            attributes.push(("type", validation_type.clone()));
         }
         if let Some(allow_blank) = &self.allow_blank {
             attributes.push(("allowBlank", allow_blank.to_string()));
