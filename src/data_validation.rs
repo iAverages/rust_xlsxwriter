@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct DataValidation {
     pub _type: Option<String>,
     // pub error_style: String
@@ -15,25 +15,6 @@ pub struct DataValidation {
     pub formula1: Option<Formula1>,
     pub formula2: Option<Formula2>,
     pub sqref: (String, String),
-}
-
-impl Default for DataValidation {
-    fn default() -> Self {
-        DataValidation {
-            _type: None,
-            allow_blank: None,
-            show_drop_down: None,
-            show_input_message: None,
-            show_error_message: None,
-            error_title: None,
-            error: None,
-            prompt_title: None,
-            prompt: None,
-            formula1: None,
-            formula2: None,
-            sqref: (String::from(""), String::from("")),
-        }
-    }
 }
 
 impl DataValidation {
