@@ -118,7 +118,7 @@ impl DataValidation {
             attributes.push(("prompt", prompt.clone()));
         }
 
-        attributes.push(("sqref", self.sqref.0.clone() + ":" + &self.sqref.1.clone()));
+        attributes.push(("sqref", format!("{}:{}", self.sqref.0, self.sqref.1)));
 
         attributes
     }
