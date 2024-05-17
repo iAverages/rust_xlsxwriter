@@ -94,16 +94,28 @@ impl DataValidation {
             attributes.push(("type", validation_type.clone()));
         }
         if let Some(allow_blank) = &self.allow_blank {
-            attributes.push(("allowBlank", allow_blank.to_string()));
+            attributes.push((
+                "allowBlank",
+                if *allow_blank { "1" } else { "0" }.to_string(),
+            ));
         }
         if let Some(show_drop_down) = &self.show_drop_down {
-            attributes.push(("showDropDown", show_drop_down.to_string()));
+            attributes.push((
+                "showDropDown",
+                if *show_drop_down { "1" } else { "0" }.to_string(),
+            ));
         }
         if let Some(show_input_message) = &self.show_input_message {
-            attributes.push(("showInputMessage", show_input_message.to_string()));
+            attributes.push((
+                "showInputMessage",
+                if *show_input_message { "1" } else { "0" }.to_string(),
+            ));
         }
         if let Some(show_error_message) = &self.show_error_message {
-            attributes.push(("showErrorMessage", show_error_message.to_string()));
+            attributes.push((
+                "showErrorMessage",
+                if *show_error_message { "1" } else { "0" }.to_string(),
+            ));
         }
         if let Some(error_title) = &self.error_title {
             attributes.push(("errorTitle", error_title.clone()));
