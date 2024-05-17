@@ -13143,7 +13143,7 @@ impl Worksheet {
         if let Some(formula1) = &data_validation.formula1 {
             self.writer.xml_data_element(
                 "formula1",
-                format!("\"{}\"", formula1.value).as_str(),
+                format!("{}", formula1.value).as_str(),
                 &attributes,
             );
         }
@@ -13151,7 +13151,7 @@ impl Worksheet {
         if let Some(formula2) = &data_validation.formula2 {
             self.writer.xml_data_element(
                 "formula2",
-                format!("\"{}\"", formula2.value).as_str(),
+                format!("{}", formula2.value).as_str(),
                 &attributes,
             );
         }
